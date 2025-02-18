@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { MaterialModules } from '../material';
 import {
   FormControl,
@@ -10,7 +10,8 @@ import { Movie } from '../_models/movie.model';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { SearchService } from '../_services/search.service';
 import { HttpClientModule } from '@angular/common/http';
-import { debounceTime } from 'rxjs';
+import { debounceTime, Subject, takeUntil } from 'rxjs';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-search',
@@ -21,12 +22,13 @@ import { debounceTime } from 'rxjs';
     FormsModule,
     ReactiveFormsModule,
     MovieCardComponent,
+    MatGridListModule,
   ],
   providers: [SearchService],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   private readonly searchService = inject(SearchService);
 
   public searchForm: FormGroup<SearchFormInterface> = new FormGroup({
@@ -35,49 +37,36 @@ export class SearchComponent implements OnInit {
 
   public searched = signal(false);
 
-  public movies: Movie[] = [
-    {
-      title: 'New Movie',
-      rating: 3.4,
-      votes: 1043,
-      source: 'IMDb',
-    },
-    {
-      title: 'Danger Ranga',
-      rating: 5.4,
-      votes: 1043,
-      source: 'IMDb',
-    },
-    {
-      title: 'Queen',
-      rating: 7,
-      votes: 1043,
-      source: 'IMDb',
-    },
-    {
-      title: 'Animal',
-      rating: 8.2,
-      votes: 1043,
-      source: 'IMDb',
-    },
-  ];
+  public movies: Movie[] = [];
+
+  private readonly unsub$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.searchForm.valueChanges.pipe(debounceTime(1000)).subscribe({
-      next: (res) => {
-        console.log(res);
-        this.onSearch(res.search ?? '');
-      },
-    });
+    this.searchForm.valueChanges
+      .pipe(debounceTime(1000), takeUntil(this.unsub$))
+      .subscribe({
+        next: (res) => {
+          this.onSearch(res.search ?? '');
+        },
+      });
   }
 
   public onSearch(text: string) {
     this.searched.set(true);
+    if (!text) {
+      this.movies = [];
+      return;
+    }
     this.searchService.search(text).subscribe({
       next: (res) => {
-        console.log(res);
+        this.movies = res;
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsub$.next();
+    this.unsub$.unsubscribe();
   }
 }
 

@@ -19,4 +19,6 @@
   display: block;
   height: calc(100% - var(--mat-toolbar-standard-height));
   overflow-y: auto;
+
+  padding: 0 1rem;
 }
