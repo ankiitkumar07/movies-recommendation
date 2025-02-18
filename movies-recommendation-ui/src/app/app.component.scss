@@ -1,0 +1,22 @@
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-icon {
+    cursor: pointer;
+  }
+}
+
+.tab-panel {
+  display: block;
+  height: calc(100% - var(--mat-toolbar-standard-height));
+  overflow-y: auto;
+}

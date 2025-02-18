@@ -1,0 +1,25 @@
+<mat-toolbar>
+  <div class="toolbar">
+    <div>
+      <span>Movies Recommendations</span>
+      <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+        @for (tab of tabs; track tab) {
+        <a
+          mat-tab-link
+          (click)="navigate(tab.link)"
+          [active]="activeLink == tab.link"
+        >
+          {{ tab.name }}
+        </a>
+        }
+      </nav>
+    </div>
+    <div>
+      <mat-icon class="user-icon">account_circle</mat-icon>
+    </div>
+  </div>
+</mat-toolbar>
+
+<mat-tab-nav-panel class="tab-panel" #tabPanel>
+  <router-outlet></router-outlet>
+</mat-tab-nav-panel>

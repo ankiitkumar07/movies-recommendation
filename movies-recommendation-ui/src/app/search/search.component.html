@@ -1,0 +1,19 @@
+<div class="main" [formGroup]="searchForm" [class.searched]="searched()">
+  <div class="search-con">
+    <mat-form-field [style.width.%]="100">
+      <mat-label>Search</mat-label>
+      <input matInput placeholder="Start Typing" [formControlName]="'search'" />
+      <mat-icon matSuffix>search</mat-icon>
+      <mat-hint>Search for your favorite actor or movie title</mat-hint>
+    </mat-form-field>
+  </div>
+
+  @if (searched()) {
+  <div class="movies">
+    @for (movie of movies; track $index) {
+    <app-movie-card [movie]="movie"></app-movie-card>
+    }
+  </div>
+
+  }
+</div>
