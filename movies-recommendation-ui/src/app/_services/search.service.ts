@@ -11,7 +11,7 @@ export class SearchService {
 
   public search(q: string): Observable<Array<Movie>> {
     return this.http
-      .get<APIResponseI<Array<Movie>>>(`${this.rootUrl}/search`, {
+      .get<APIResponseI<Array<Movie>>>(`${this.rootUrl}/movies/search`, {
         params: {
           q,
         },
