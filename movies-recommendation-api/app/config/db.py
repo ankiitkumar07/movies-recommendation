@@ -1,12 +1,14 @@
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from app.config.config import settings
 
-uri = "mongodb+srv://eagleeyeofrajbika:KXylefF41dTTW2GU@cluster0.atxmg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = f"mongodb+srv://{settings.MONGO_INITDB_ROOT_USERNAME}:{settings.MONGO_INITDB_ROOT_PASSWORD}@{settings.MONGO_INITDB_DATABASE}.atxmg.mongodb.net/?retryWrites=true&w=majority&appName={settings.MONGO_INITDB_APP_NAME}"
 
 # Create a new client and connect to the server
 
-def connect_to_mongo(): 
+
+def connect_to_mongo():
     client = MongoClient(uri, server_api=ServerApi('1'))
 
     # Send a ping to confirm a successful connection

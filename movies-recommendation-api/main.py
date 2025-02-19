@@ -4,9 +4,8 @@ from typing import List
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from response import ResponseModel
-
-from db import connect_to_mongo
+from app.models.response import ResponseModel
+from app.config.db import connect_to_mongo
 
 app = FastAPI()
 
@@ -22,7 +21,7 @@ def serialize_document(doc):
 
 @app.on_event("startup")
 async def startup():
-    global client 
+    global client
     client = connect_to_mongo()
 
 app.add_middleware(
@@ -39,24 +38,26 @@ class MovieRecommendation(BaseModel):
     movie_name: str
 
 # Endpoint to receive 3 favorite movies
+
+
 @app.post("/api/recommend")
 def recommend_movies(movies: List[MovieRecommendation]):
     # This would usually use a model to generate recommendations
     recommendations = [
-        "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5", 
+        "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5",
         "Movie 6", "Movie 7", "Movie 8", "Movie 9", "Movie 10"
     ]
     return {"recommended_movies": recommendations}
 
 # Endpoint to store movie selections
+
+
 @app.post("/api/store-selection")
 def store_selection(selected_movies: List[MovieRecommendation]):
     # Here, you'd save data to a database
     return {"message": "Selections saved successfully!"}
 
 
-
-# Endpoint to store movie selections
 @app.get("/api/search", response_model=ResponseModel)
 def search(q: str = Query(..., min_length=1)):
     # Here, you'd save data to a database
@@ -64,11 +65,6 @@ def search(q: str = Query(..., min_length=1)):
     collection = db.get_collection('movies')
     regex_query = {"title": {"$regex": q, "$options": "i"}}
     documents = collection.find(regex_query)
-    
-    ser_doc = [serialize_document(doc) for doc in documents]
 
-    print("test start")
-    for item in ser_doc:
-        print(item)
-    print("test end")
+    ser_doc = [serialize_document(doc) for doc in documents]
     return ResponseModel(status="success", data=ser_doc, message="Fetched Successfully")

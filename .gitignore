@@ -3,6 +3,8 @@ package-lock.json
 mongodb.txt
 __pycache__
 
+movies-recommendation-api/.env
+
 
 
 # Compiled output
