@@ -3,10 +3,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from pydantic import BaseModel
-
 from app.config.db import MongoDB
-from app.routers import movies
+from app.routers import movies, auth, user
 from app.config.config import settings
 
 
@@ -30,4 +28,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-app.include_router(movies.router, tags=['Auth'], prefix='/api/movies')
+app.include_router(movies.router, tags=['Movies'], prefix='/api/movies')
+app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
+app.include_router(user.router, tags=['User'], prefix='/api/user')

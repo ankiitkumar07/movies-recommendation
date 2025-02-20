@@ -19,3 +19,10 @@ def search(q: str = Query(..., min_length=1)):
     documents = [serializer.serialize_document(
         doc) for doc in db.find('movies', regex_query)]
     return ResponseModel(status="success", data=documents, message="Fetched Successfully")
+
+
+@router.get('', response_model=ResponseModel)
+def get_all_movies():
+    documents = [serializer.serialize_document(
+        doc) for doc in db.find('movies', {})]
+    return ResponseModel(status="success", data=documents, message="Fetched All Movies Successfully")

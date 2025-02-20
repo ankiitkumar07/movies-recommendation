@@ -10,7 +10,6 @@ class MongoDB:
     _instance = None
 
     def __new__(cls, uri=__uri, db_name="sample_mflix"):
-        print(uri)
         if cls._instance is None:
             cls._instance = super(MongoDB, cls).__new__(cls)
             cls._instance._connect(uri, db_name)

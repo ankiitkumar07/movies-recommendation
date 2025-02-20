@@ -1,21 +1,15 @@
-<div
-    class="movie-card"
-    [class.hovered]="hovered()"
->
-    <div
-        class="movie-poster"
-        [moviePoster]="movie.poster"
-    >
-        <div class="details">
-            <div class="rating">
-                <mat-icon>star</mat-icon>
-                <span>{{movie.imdb.rating}} / 10</span>
-            </div>
-            <button mat-fab>
-                <mat-icon>thumb_up</mat-icon>
-            </button>
-            <button mat-raised-button>Details</button>
-        </div>
+<div class="movie-card" [class.hovered]="hovered()">
+  <div class="movie-poster" [moviePoster]="movie.poster">
+    <div class="details">
+      <div class="rating">
+        <mat-icon>star</mat-icon>
+        <span>{{ movie.imdb.rating }} / 10</span>
+      </div>
+      <button mat-fab>
+        <mat-icon>thumb_up</mat-icon>
+      </button>
+      <button (click)="saveMovie()" mat-raised-button>Details</button>
     </div>
-    <div class="title">{{ movie.title }}</div>
+  </div>
+  <div class="title">{{ movie.title }}</div>
 </div>
